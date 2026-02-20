@@ -1,0 +1,1 @@
+# search optimization using debounce and client side pagination
