@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { use, useEffect, useMemo, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -7,10 +7,21 @@ function App() {
   const [count, setCount] = useState(0);
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
+  const [debounceQuery, setDebounceQuery] = useState("");
 
   useEffect(() => {
-    getFetchData(search);
+    const handler = setTimeout(() => {
+      setDebounceQuery(search);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
   }, [search]);
+
+  useEffect(() => {
+    getFetchData(debounceQuery);
+  }, [debounceQuery]);
 
   const getFetchData = async (searchString:any) => {
     try {
@@ -29,7 +40,7 @@ function App() {
       setUsers(formattedUsers);
     } catch (error) {
       console.error("Error fetching data:", error);
-    }
+    }[debounceQuery]
   }
 
   return (
